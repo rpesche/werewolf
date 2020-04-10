@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+{% block title %} Werewolf {% endblock %}
+
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <p> Salut {{ request.user }} </p>
+{% else %}
+    <p> T'es qui ? </p>
+{% endif %}
+
+{% endblock %}

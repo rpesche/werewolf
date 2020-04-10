@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">Werewolf</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-werewolf">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav" id="navbar-werewolf">
+      {% if request.user.is_authenticated %}
+        <li class="nav-item"><a href="/authentication/logout" class="nav-link">Logout</a></li>
+      {% else %}
+        <li class="nav-item"><a href="/authentication/login" class="nav-link">Login</a></li>
+        <li class="nav-item"><a href="/authentication/register" class="nav-link">Register</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
