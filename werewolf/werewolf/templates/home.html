@@ -13,7 +13,7 @@
 {% if request.user.is_authenticated %}
     <p> Salut {{ request.user }} </p>
 {% else %}
-    <p> T'es qui ? </p>
+    <p> Vous n'êtes pas authentifié. </p>
 {% endif %}
 
 {% endblock %}
