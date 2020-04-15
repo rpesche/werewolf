@@ -11,7 +11,29 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-    <p> Salut {{ request.user }} </p>
+    <a href='/werewolf/new'>Créer une partie</a>
+
+    <ul class="list-group">
+      {% for game in games %}
+        <li class="list-group-item">
+            <p>
+              {{game.name}}
+
+              {% if game.status == 'DONE' %}
+                <span class="badge badge-pill badge-danger">Finished</span>
+              {% endif %}
+              {% if game.status == 'IN PROGRESS' %}
+                 <span class="badge badge-pill badge-success">In progress</span>
+              {% endif %}
+              {% if game.status == 'NOT LAUNCHED' %}
+                  <span class="badge badge-pill badge-warning">Not launched</span>
+              {% endif %}
+            </p>
+        </li>
+      {% endfor %}
+    </ul>
+
+</div>
 {% else %}
     <p> Vous n'êtes pas authentifié. </p>
 {% endif %}
