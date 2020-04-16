@@ -16,3 +16,26 @@ class Game(models.Model):
         if self.start_date:
             return 'IN PROGRESS'
         return 'NOT LAUNCHED'
+
+
+class Player(models.Model):
+    HUMAN = 'HUMA'
+    WEREWOLF = 'WOLF'
+    UNDEFINED = 'NONE'
+
+    PLAYER_CATEGORY = [
+        (UNDEFINED, 'Undefined'),
+        (HUMAN, 'Human'),
+        (WEREWOLF, 'Werewolf'),
+    ]
+
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    game = models.ForeignKey(to=Game, on_delete=models.CASCADE)
+    type = models.CharField(
+        max_length=4,
+        choices=PLAYER_CATEGORY,
+        default=UNDEFINED,
+    )
+
+    class Meta:
+        unique_together = ('game', 'owner',)

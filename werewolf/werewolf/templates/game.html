@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+{% block title %} {{ game.name }} {% endblock %}
+
+
+{% block content %}
+    <p> Players Lists </p>
+    <ul class="list-group">
+        {% for player in players %}
+            <li class="list-group-item">
+                {{ player.owner.username }}
+                {#{{ player.owner.name }}#}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

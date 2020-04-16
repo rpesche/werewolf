@@ -17,7 +17,7 @@
       {% for game in games %}
         <li class="list-group-item">
             <p>
-              {{game.name}}
+              <a href="{% url 'game' game.pk %}">{{game.name}}</a>
 
               {% if game.status == 'DONE' %}
                 <span class="badge badge-pill badge-danger">Finished</span>
