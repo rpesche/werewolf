@@ -1,9 +1,13 @@
+import datetime
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, FormView
 from django.views.generic.detail import DetailView
+from django.urls import reverse
 
 from werewolf.models import Game, Player
+from werewolf.forms import StartGameForm
 
 
 class HomeView(TemplateView):
@@ -51,3 +55,20 @@ class JoinGame(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         form.instance.game = self.game
         return super().form_valid(form)
+
+
+class StartGame(FormView):
+    template_name = 'start_game.html'
+    form_class = StartGameForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.game = get_object_or_404(Game, pk=kwargs['game_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.game.start_date = datetime.date.today()
+        self.game.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('game', args=(self.game.pk, ))
