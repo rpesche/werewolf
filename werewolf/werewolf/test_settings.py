@@ -1,6 +1,6 @@
 import os
 
-from werewolf.settings import *
+from werewolf.settings import *  # noqa
 from werewolf.settings import BASE_DIR
 
 SECRET_KEY = "TestSecretKey"

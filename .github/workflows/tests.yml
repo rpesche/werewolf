@@ -1,5 +1,5 @@
 
-name: Django CI
+name: Code Quality CI
 
 on:
   push:
@@ -8,14 +8,14 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
 
+  tests:
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8]
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -31,3 +31,15 @@ jobs:
       run: |
         cd werewolf/
         pytest
+
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        run: flake8
