@@ -19,13 +19,13 @@
             <p>
               <a href="{% url 'game' game.pk %}">{{game.name}}</a>
 
-              {% if game.status == 'DONE' %}
+              {% if game.status == game.DONE %}
                 <span class="badge badge-pill badge-danger">Finished</span>
               {% endif %}
-              {% if game.status == 'IN PROGRESS' %}
+              {% if game.status == game.IN_PROGRESS %}
                  <span class="badge badge-pill badge-success">In progress</span>
               {% endif %}
-              {% if game.status == 'NOT LAUNCHED' %}
+              {% if game.status == game.NOT_LAUNCHED %}
                   <span class="badge badge-pill badge-warning">Not launched</span>
                   <a href="{% url 'start-game' game.pk %}"> Launch Game </a>
               {% endif %}

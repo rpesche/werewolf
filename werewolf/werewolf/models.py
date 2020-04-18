@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 
 
 class Game(models.Model):
+
+    DONE = 'DONE'
+    IN_PROGRESS = 'IN_PROGRESS'
+    NOT_LAUNCHED = 'NOT_LAUNCHED'
+
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -12,10 +17,10 @@ class Game(models.Model):
     @property
     def status(self):
         if self.end_date:
-            return 'DONE'
+            return self.DONE
         if self.start_date:
-            return 'IN PROGRESS'
-        return 'NOT LAUNCHED'
+            return self.IN_PROGRESS
+        return self.NOT_LAUNCHED
 
 
 class Player(models.Model):
