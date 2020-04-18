@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, CreateView, FormView
 from django.views.generic.detail import DetailView
 from django.urls import reverse
+from django.http import HttpResponseNotAllowed
 
 from werewolf.models import Game, Player
 from werewolf.forms import StartGameForm
@@ -49,6 +50,9 @@ class JoinGame(LoginRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.game = get_object_or_404(Game, pk=kwargs['game_id'])
+
+        if self.game.status != Game.NOT_LAUNCHED:
+            return HttpResponseNotAllowed('Game is already launched')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -63,6 +67,9 @@ class StartGame(FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.game = get_object_or_404(Game, pk=kwargs['game_id'])
+
+        if self.game.status != Game.NOT_LAUNCHED:
+            return HttpResponseNotAllowed('Game is already launched')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
