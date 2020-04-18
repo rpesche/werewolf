@@ -1,11 +1,11 @@
-import datetime
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, CreateView, FormView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.urls import reverse
 from django.http import HttpResponseNotAllowed
+from guardian.shortcuts import assign_perm
+from guardian.mixins import PermissionRequiredMixin
 
 from werewolf.models import Game, Player
 from werewolf.forms import StartGameForm
@@ -29,6 +29,8 @@ class NewGame(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
+        form.instance.save()
+        assign_perm('change_game', self.request.user, form.instance)
         return super().form_valid(form)
 
 
@@ -61,21 +63,23 @@ class JoinGame(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class StartGame(FormView):
+class StartGame(FormView, PermissionRequiredMixin, SingleObjectMixin):
     template_name = 'start_game.html'
     form_class = StartGameForm
-
-    def dispatch(self, request, *args, **kwargs):
-        self.game = get_object_or_404(Game, pk=kwargs['game_id'])
-
-        if self.game.status != Game.NOT_LAUNCHED:
-            return HttpResponseNotAllowed('Game is already launched')
-        return super().dispatch(request, *args, **kwargs)
+    model = Game
+    pk_url_kwarg = 'game_id'
+    permission_required = 'change_game'
 
     def form_valid(self, form):
-        self.game.start_date = datetime.date.today()
-        self.game.save()
+        game = self.get_object()
+
+        if game.status != Game.NOT_LAUNCHED:
+            return HttpResponseNotAllowed('Game is already launched')
+
+        game.start()
+        game.save()
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('game', args=(self.game.pk, ))
+        game = self.get_object()
+        return reverse('game', args=(game.pk, ))
