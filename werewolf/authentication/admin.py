@@ -1,5 +1,5 @@
 from django.contrib import admin
-from werewolf.models import Game, Player
+from werewolf.models.game import Game, Player
 
 
 @admin.register(Game)

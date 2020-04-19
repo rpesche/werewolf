@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from werewolf.models import Game
+from werewolf.models.game import Game
 
 
 @pytest.fixture

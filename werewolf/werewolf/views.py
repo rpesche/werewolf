@@ -7,7 +7,7 @@ from django.http import HttpResponseNotAllowed
 from guardian.shortcuts import assign_perm
 from guardian.mixins import PermissionRequiredMixin
 
-from werewolf.models import Game, Player
+from werewolf.models.game import Game, Player
 from werewolf.forms import StartGameForm
 
 
