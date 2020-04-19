@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, CreateView, FormView
-from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.views.generic.detail import DetailView, BaseDetailView
 from django.urls import reverse
 from django.http import HttpResponseNotAllowed
 from guardian.shortcuts import assign_perm
@@ -63,7 +63,7 @@ class JoinGame(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class StartGame(FormView, PermissionRequiredMixin, SingleObjectMixin):
+class StartGame(FormView, PermissionRequiredMixin, BaseDetailView):
     template_name = 'start_game.html'
     form_class = StartGameForm
     model = Game
