@@ -5,6 +5,13 @@ from werewolf.models import Game
 
 
 @pytest.mark.django_db
+def test_get_form_start_game(logged_client, game):
+    url = reverse('start-game', args=(game.pk, ))
+    response = logged_client.get(url)
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
 def test_create_game(game):
     assert game.status == Game.NOT_LAUNCHED
 
