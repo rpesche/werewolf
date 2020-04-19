@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from .character import RegisteredCharacters, Unknown
+
 
 class Game(models.Model):
 
@@ -27,23 +29,14 @@ class Game(models.Model):
         self.start_date = timezone.now()
 
 
+
 class Player(models.Model):
-    HUMAN = 'HUMA'
-    WEREWOLF = 'WOLF'
-    UNDEFINED = 'NONE'
-
-    PLAYER_CATEGORY = [
-        (UNDEFINED, 'Undefined'),
-        (HUMAN, 'Human'),
-        (WEREWOLF, 'Werewolf'),
-    ]
-
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     game = models.ForeignKey(to=Game, on_delete=models.CASCADE)
     type = models.CharField(
         max_length=4,
-        choices=PLAYER_CATEGORY,
-        default=UNDEFINED,
+        choices=[(slug, name) for slug, name, _ in RegisteredCharacters.registered_characters],
+        default=Unknown.slug,
     )
 
     class Meta:
