@@ -5,6 +5,11 @@ from django.utils import timezone
 from .character import RegisteredCharacters, Unknown
 
 
+class Round(models.Model):
+    game = models.ForeignKey(to='Game', on_delete=models.CASCADE, related_name='rounds')
+    number = models.IntegerField()
+
+
 class Game(models.Model):
 
     DONE = 'DONE'
@@ -16,6 +21,7 @@ class Game(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField(null=True)
     end_date = models.DateTimeField(null=True)
+    current_round = models.ForeignKey(to=Round, on_delete=models.SET_NULL, default=None, null=True, related_name='+')
 
     @property
     def status(self):
