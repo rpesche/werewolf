@@ -39,8 +39,8 @@ class Villager(EmptyCharacter):
     name = 'Human'
     slug = 'HUMA'
     start_permissions = [
-        "Game.can_vote_mayor",
-        "Game.can_vote_hanged",
+        "Game.can_elect",
+        "Game.can_vote",
     ]
 
 
@@ -48,7 +48,7 @@ class Werewolf(EmptyCharacter):
     name = 'Werewolf'
     slug = 'WOLF'
     start_permissions = [
-        "Game.can_vote_mayor",
-        "Game.can_vote_hanged",
-        "Game.can_vote_murdered",
+        "Game.can_elect",
+        "Game.can_vote",
+        "Game.can_murder",
     ]

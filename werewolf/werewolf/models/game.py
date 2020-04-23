@@ -34,6 +34,16 @@ class Game(models.Model):
     def start(self):
         self.start_date = timezone.now()
 
+    class Meta:
+        permissions = (
+            ('can_elect', 'Elect a player to be mayor'),
+            ('can_vote', 'Vote against a player to be hanged'),
+            ('can_murder', 'Werewolf vote to kill someone'),
+            ('can_predict', 'Seer hability to predict someone character'),
+            ('can_link', 'Cupidon hability to link to player to death'),
+            ('can_save', 'Witch hability to save someone'),
+            ('can_poison', 'Witch hability to kill someone'),
+        )
 
 
 class Player(models.Model):
