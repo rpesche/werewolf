@@ -1,2 +1,4 @@
 
-from .game import Player, Game  # noqa
+from .game import *  # noqa
+from .actions import *  # noqa
+from .character import *  # noqa
