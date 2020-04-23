@@ -1,12 +1,27 @@
 from django.contrib import admin
-from werewolf.models import Game, Player
+from guardian.admin import GuardedModelAdmin
+
+from werewolf.models.game import Game, Player, Round
+from werewolf.models.actions import Vote
 
 
-@admin.register(Game)
-class AuthorAdmin(admin.ModelAdmin):
+class GameAdmin(GuardedModelAdmin):
+    pass
+
+
+class VoteAdmin(GuardedModelAdmin):
     pass
 
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Round)
+class RoundAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Game, GameAdmin)
+admin.site.register(Vote, VoteAdmin)
