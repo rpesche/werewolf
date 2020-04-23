@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
 
 from .character import RegisteredCharacters, Unknown
 
@@ -30,9 +29,6 @@ class Game(models.Model):
         if self.start_date:
             return self.IN_PROGRESS
         return self.NOT_LAUNCHED
-
-    def start(self):
-        self.start_date = timezone.now()
 
     class Meta:
         permissions = (

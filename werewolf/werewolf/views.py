@@ -9,6 +9,7 @@ from guardian.mixins import PermissionRequiredMixin
 
 from werewolf.models.game import Game, Player
 from werewolf.forms import StartGameForm
+from werewolf.core.game import start_game
 
 
 class HomeView(TemplateView):
@@ -55,6 +56,7 @@ class JoinGame(LoginRequiredMixin, CreateView):
 
         if self.game.status != Game.NOT_LAUNCHED:
             return HttpResponseNotAllowed('Game is already launched')
+
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -63,7 +65,7 @@ class JoinGame(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class StartGame(FormView, PermissionRequiredMixin, BaseDetailView):
+class StartGame(LoginRequiredMixin, FormView, PermissionRequiredMixin, BaseDetailView):
     template_name = 'start_game.html'
     form_class = StartGameForm
     model = Game
@@ -76,8 +78,7 @@ class StartGame(FormView, PermissionRequiredMixin, BaseDetailView):
         if game.status != Game.NOT_LAUNCHED:
             return HttpResponseNotAllowed('Game is already launched')
 
-        game.start()
-        game.save()
+        start_game(game, self.request.user)
         return super().form_valid(form)
 
     def get_success_url(self):
