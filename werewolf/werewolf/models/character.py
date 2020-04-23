@@ -1,4 +1,5 @@
 
+
 class RegisteredCharacters(type):
 
     registered_characters = []
@@ -51,4 +52,35 @@ class Werewolf(EmptyCharacter):
         "Game.can_elect",
         "Game.can_vote",
         "Game.can_murder",
+    ]
+
+
+class Seer(EmptyCharacter):
+    name = 'Seer'
+    slug = 'SEER'
+    start_permissions = [
+        "Game.can_elect",
+        "Game.can_vote",
+        "Game.can_predict",
+    ]
+
+
+class Cupidon(EmptyCharacter):
+    name = 'Cupidon'
+    slug = 'CUPD'
+    start_permissions = [
+        "Game.can_elect",
+        "Game.can_vote",
+        "Game.can_link",
+    ]
+
+
+class Witch(EmptyCharacter):
+    name = 'Witch'
+    slug = 'WTCH'
+    start_permissions = [
+        "Game.can_elect",
+        "Game.can_vote",
+        "Game.can_save",
+        "Game.can_poison",
     ]
