@@ -1,0 +1,5 @@
+[tool.semantic_release]
+
+version_variable = "werewolf/__init__.py:__version__"
+upload_to_pypi = false
+upload_to_release = false
