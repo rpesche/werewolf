@@ -1,0 +1,35 @@
+name: Semantic Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Python Semantic Release
+      uses: relekang/python-semantic-release@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        pypi_username: <ADD YOUR USERNAME HERE>
+        pypi_password: ${{ secrets.PYPI_PASSWORD }}
+
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Merge master to dev
+        uses: devmasx/merge-branch@v1.1.0
+        with:
+          label_name: 'merged in dev'
+          target_branch: 'dev'
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
