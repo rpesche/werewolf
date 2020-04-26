@@ -29,7 +29,7 @@ jobs:
       - name: Merge master to dev
         uses: devmasx/merge-branch@v1.1.0
         with:
-          label_name: 'merged in dev'
           target_branch: 'dev'
+          type: now
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
