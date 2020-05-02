@@ -3,7 +3,7 @@ import random
 from django.utils import timezone
 from guardian.shortcuts import assign_perm
 
-from werewolf.models.game import Player
+from werewolf.models.game import Player, Round
 from werewolf.models.character import Villager, Werewolf, Cupidon, Witch, Seer
 
 
@@ -16,6 +16,8 @@ def start_game(game, user):
         character = random.choice([Villager, Werewolf, Cupidon, Witch, Seer])
         set_player_character(player, character)
         set_up_permissions(player.owner, game, character)
+    game.current_round = Round.objects.create(game=game, number=0)
+    game.save()
 
 
 def set_player_character(player, character_class):

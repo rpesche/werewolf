@@ -23,21 +23,21 @@ class Vote(SelectAction):
     """
         Actions to vote against someone, and kill it at the end of the day
     """
-    permission = 'Game.can_vote'
+    permission = 'can_vote'
 
 
 class Murder(SelectAction):
     """
        Werewolf actions to kill someone
     """
-    permission = 'Game.can_murder'
+    permission = 'can_murder'
 
 
 class Predict(SelectAction):
     """
        Seer actions to predict the character of someone
     """
-    permission = 'Game.can_predict'
+    permission = 'can_predict'
 
 
 class Link(SelectAction):
@@ -45,21 +45,21 @@ class Link(SelectAction):
         Cupidon action which link to player, to death
     """
     lover = models.ForeignKey(to=Player, on_delete=models.CASCADE, related_name='+')
-    permission = 'Game.can_link'
+    permission = 'can_link'
 
 
 class Save(SelectAction):
     """
         Witch action to use potion to save someone
     """
-    permission = 'Game.can_save'
+    permission = 'can_save'
 
 
 class Poison(SelectAction):
     """
         Witch action to use potion to kill someone
     """
-    permission = 'Game.can_poison'
+    permission = 'can_poison'
 
 # TODO Amoureux ? Post-Kill ?
 # TODO Chasseur ? Post-Kill ?
