@@ -13,19 +13,24 @@
 {% block content %}
     {% get_obj_perms request.user for game as "game_perms" %}
 
-    <p> Players Lists </p>
+    <p> Vote : </p>
     <ul class="list-group">
         {% for player in players %}
-            <li class="list-group-item">
-                {{ player.owner.username }}
+            {% if player != me %}
+                <li class="list-group-item">
+                    <div class="vote-btn" id="{{ player.id }}">
 
-
-
-                {% if "can_vote" in game_perms %}
-                    <button type="button" class="btn btn-outline-success" onclick="vote({{ player.pk }})">Vote</button>
-                {% endif %}
-
-            </li>
+                        {{ player.owner.username }}
+                        {% if "can_vote" in game_perms %}
+                            {% if me.vote and me.vote.whom == player %}
+                                <button type="button" class="btn btn-success" onclick="vote({{ player.pk }})">Vote</button>
+                            {% else %}
+                                <button type="button" class="btn btn-outline-success" onclick="vote({{ player.pk }})">Vote</button>
+                            {% endif %}
+                        {% endif %}
+                    </div»
+                </li>
+            {% endif %}
 
         {% endfor %}
     </ul>

@@ -1,6 +1,20 @@
 
-function post_vote(data) {
-    // TODO : highlight current elected character
+function set_vote_to(player) {
+    var divs = document.getElementsByClassName("vote-btn")
+    for (var i = 0, len = divs.length; i < len; i++) {
+        var div = divs[i];
+        var button = div.children[0];
+
+        button.classList.remove("btn-outline-success")
+        button.classList.remove("btn-success")
+
+        if (div.id == player) {
+            button.classList.add("btn-success")
+        } else {
+
+            button.classList.add("btn-outline-success")
+        }
+    }
 }
 
 
@@ -24,6 +38,8 @@ function vote(player) {
             'whom': player
        },
        dataType: 'json',
-       success: post_vote
+       success: function() {
+            set_vote_to(player);
+       }
     });
 }
