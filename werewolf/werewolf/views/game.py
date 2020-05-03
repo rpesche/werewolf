@@ -18,8 +18,11 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context['games'] = Game.objects.filter(owner=self.request.user)
+
+        me = self.request.user
+        if me.is_authenticated:
+            context['owned_games'] = Game.objects.filter(owner=me)
+            context['joined_games'] = Game.objects.filter(Q(player__owner=me) & ~Q(owner=me))
         return context
 
 
