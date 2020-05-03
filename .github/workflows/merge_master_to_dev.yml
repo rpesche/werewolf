@@ -5,8 +5,10 @@ on:
   push:
     branches:
       - master
-  tags:
-    - v*
+    tags:
+      - v*
+
+jobs:
 
   merge-branch:
     runs-on: ubuntu-latest
