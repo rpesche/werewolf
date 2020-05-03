@@ -52,3 +52,7 @@ function action(player, path, klass, bootstrap_btn) {
 function vote(player) {
     action(player, '/vote', "vote-btn", "success")
 }
+
+function murder(player) {
+    action(player, '/murder', "murder-btn", "danger")
+}

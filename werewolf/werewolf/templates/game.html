@@ -34,6 +34,26 @@
         {% endfor %}
     </ul>
 
+    {% if "can_murder" in game_perms %}
+    <p> Murder : </p>
+        <ul class="list-group">
+            {% for player in players %}
+                {% if player != me and player.type != 'WOLF' %}
+                    <li class="list-group-item">
+                        <div class="murder-btn" id="{{ player.id }}">
+                            {{ player.owner.username }}
+                            {% if me.murder and me.murder.whom == player %}
+                                <button type="button" class="btn btn-danger" onclick="murder({{ player.pk }})">Murder</button>
+                            {% else %}
+                                <button type="button" class="btn btn-outline-danger" onclick="murder({{ player.pk }})">Murder</button>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 {% csrf_token %}
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>

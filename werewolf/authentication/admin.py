@@ -2,7 +2,7 @@ from django.contrib import admin
 from guardian.admin import GuardedModelAdmin
 
 from werewolf.models.game import Game, Player, Round
-from werewolf.models.actions import Vote
+from werewolf.models.actions import Vote, Murder
 
 
 class GameAdmin(GuardedModelAdmin):
@@ -10,6 +10,10 @@ class GameAdmin(GuardedModelAdmin):
 
 
 class VoteAdmin(GuardedModelAdmin):
+    pass
+
+
+class MurderAdmin(GuardedModelAdmin):
     pass
 
 
@@ -25,3 +29,4 @@ class RoundAdmin(admin.ModelAdmin):
 
 admin.site.register(Game, GameAdmin)
 admin.site.register(Vote, VoteAdmin)
+admin.site.register(Murder, MurderAdmin)
