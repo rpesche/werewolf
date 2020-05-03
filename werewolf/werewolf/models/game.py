@@ -53,3 +53,21 @@ class Player(models.Model):
 
     class Meta:
         unique_together = ('game', 'owner',)
+
+    @property
+    def vote(self):
+        from .actions import Vote
+
+        try:
+            return Vote.objects.get(models.Q(round=self.game.current_round) & models.Q(who=self))
+        except Vote.DoesNotExist:
+            return None
+
+    @property
+    def murder(self):
+        from .actions import Murder
+
+        try:
+            return Murder.objects.get(models.Q(round=self.game.current_round) & models.Q(who=self))
+        except Murder.DoesNotExist:
+            return None

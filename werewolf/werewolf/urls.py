@@ -3,7 +3,7 @@ from django.urls import include, path
 
 
 from werewolf.views.game import HomeView, NewGame, GameView, JoinGame, StartGame
-from werewolf.views.play import VoteView
+from werewolf.views.play import VoteView, MurderView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,4 +18,5 @@ urlpatterns = [
 
     # Play
     path('werewolf/game/<game_id>/vote', VoteView.as_view(), name='action-vote'),
+    path('werewolf/game/<game_id>/murder', MurderView.as_view(), name='action-murder'),
 ]

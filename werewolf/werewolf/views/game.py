@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, CreateView, FormView
 from django.views.generic.detail import DetailView
+from django.db.models import Q
 from django.urls import reverse
 from django.http import HttpResponseNotAllowed
 from guardian.shortcuts import assign_perm
@@ -42,6 +43,7 @@ class GameView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['players'] = Player.objects.filter(game=context['game']).all()
+        context['me'] = Player.objects.get(Q(owner=self.request.user) & Q(game=context['game']))
         return context
 
 
