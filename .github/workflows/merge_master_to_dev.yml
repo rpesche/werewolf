@@ -3,10 +3,8 @@ name: Merge master to dev
 
 on:
   push:
-    branches:
-      - master
     tags:
-      - v*
+    - 'truc*'
 
 jobs:
 
