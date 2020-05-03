@@ -21,15 +21,3 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         pypi_username: <ADD YOUR USERNAME HERE>
         pypi_password: ${{ secrets.PYPI_PASSWORD }}
-
-  merge-branch:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Merge master to dev
-        uses: devmasx/merge-branch@v1.1.0
-        with:
-          target_branch: 'dev'
-          type: now
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
