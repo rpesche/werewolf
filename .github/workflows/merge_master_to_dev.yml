@@ -3,21 +3,29 @@ name: Merge master to dev
 
 on:
   push:
-    branches:
-      - master
     tags:
-      - v*
+    - 'truc*'
 
 jobs:
 
-  merge-branch:
+  #merge-branch:
+    #runs-on: ubuntu-latest
+    #steps:
+      #- uses: actions/checkout@master
+      #- name: Merge master to dev
+        #uses: devmasx/merge-branch@v1.1.0
+        #with:
+          #target_branch: 'dev'
+          #type: now
+        #env:
+          #GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          #
+
+
+
+  ma-bite:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Merge master to dev
-        uses: devmasx/merge-branch@v1.1.0
-        with:
-          target_branch: 'dev'
-          type: now
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Install Dependencies
+      run: |
+          echo "salut"
