@@ -1,24 +1,27 @@
 
-function set_vote_to(player) {
-    var divs = document.getElementsByClassName("vote-btn")
+function set_action_to(klass, bootstrap_attribute, player) {
+    var divs = document.getElementsByClassName(klass)
     for (var i = 0, len = divs.length; i < len; i++) {
         var div = divs[i];
         var button = div.children[0];
 
-        button.classList.remove("btn-outline-success")
-        button.classList.remove("btn-success")
+        var set_class = "btn-"  + bootstrap_attribute;
+        var unset_class = "btn-outline-" + bootstrap_attribute;
+
+        button.classList.remove(unset_class)
+        button.classList.remove(set_class)
 
         if (div.id == player) {
-            button.classList.add("btn-success")
+            button.classList.add(set_class)
         } else {
 
-            button.classList.add("btn-outline-success")
+            button.classList.add(unset_class)
         }
     }
 }
 
 
-function vote(player) {
+function action(player, path, klass, bootstrap_btn) {
    csrf_token = Cookies.get('csrftoken');
 
 
@@ -30,7 +33,7 @@ function vote(player) {
      }
    })
 
-   var url = window.location.pathname + '/vote'
+   var url = window.location.pathname + path;
    $.ajax({
        method : 'POST',
        url : url,
@@ -39,7 +42,13 @@ function vote(player) {
        },
        dataType: 'json',
        success: function() {
-            set_vote_to(player);
+            set_action_to(klass, bootstrap_btn, player);
        }
     });
+}
+
+
+
+function vote(player) {
+    action(player, '/vote', "vote-btn", "success")
 }
