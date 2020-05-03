@@ -13,8 +13,33 @@
 {% if request.user.is_authenticated %}
     <a href='/werewolf/new'>Créer une partie</a>
 
+    {% if owned_games %}
+        <h1> Owned Games </h1>
+        <ul class="list-group">
+          {% for game in owned_games %}
+            <li class="list-group-item">
+                <p>
+                  <a href="{% url 'game' game.pk %}">{{game.name}}</a>
+
+                  {% if game.status == game.DONE %}
+                    <span class="badge badge-pill badge-danger">Finished</span>
+                  {% endif %}
+                  {% if game.status == game.IN_PROGRESS %}
+                     <span class="badge badge-pill badge-success">In progress</span>
+                  {% endif %}
+                  {% if game.status == game.NOT_LAUNCHED %}
+                      <span class="badge badge-pill badge-warning">Not launched</span>
+                      <a href="{% url 'start-game' game.pk %}"> Launch Game </a>
+                  {% endif %}
+                </p>
+            </li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h1> Joined Games </h1>
     <ul class="list-group">
-      {% for game in games %}
+      {% for game in joined_games %}
         <li class="list-group-item">
             <p>
               <a href="{% url 'game' game.pk %}">{{game.name}}</a>
@@ -27,12 +52,10 @@
               {% endif %}
               {% if game.status == game.NOT_LAUNCHED %}
                   <span class="badge badge-pill badge-warning">Not launched</span>
-                  <a href="{% url 'start-game' game.pk %}"> Launch Game </a>
               {% endif %}
             </p>
         </li>
       {% endfor %}
-    </ul>
 
 </div>
 {% else %}
