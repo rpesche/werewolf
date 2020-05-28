@@ -31,8 +31,10 @@ INSTALLED_APPS = [
     # external application
     'bootstrap4',
     'guardian',
+    'django_extensions',
 
     'werewolf',
+    'gamemaster',
     'authentication'
 ]
 
