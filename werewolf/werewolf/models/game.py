@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 from .character import RegisteredCharacters, Unknown
 
@@ -15,7 +15,7 @@ class Game(models.Model):
     IN_PROGRESS = 'IN_PROGRESS'
     NOT_LAUNCHED = 'NOT_LAUNCHED'
 
-    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     creation_date = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField(null=True)
@@ -30,6 +30,9 @@ class Game(models.Model):
             return self.IN_PROGRESS
         return self.NOT_LAUNCHED
 
+    def __str__(self):
+        return f"\"{self.name}\" game"
+
     class Meta:
         permissions = (
             ('can_elect', 'Elect a player to be mayor'),
@@ -43,7 +46,7 @@ class Game(models.Model):
 
 
 class Player(models.Model):
-    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     game = models.ForeignKey(to=Game, on_delete=models.CASCADE)
     type = models.CharField(
         max_length=4,
@@ -71,3 +74,6 @@ class Player(models.Model):
             return Murder.objects.get(models.Q(round=self.game.current_round) & models.Q(who=self))
         except Murder.DoesNotExist:
             return None
+
+    def __str__(self):
+        return f"Player {self.owner.username} on {self.game.name} as {self.type}"

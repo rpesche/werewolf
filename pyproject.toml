@@ -23,6 +23,7 @@ djangorestframework = "^3.13.1"
 [tool.poetry.dev-dependencies]
 pytest-django = "^4.5.2"
 factory-boy = "^3.2.1"
+freezegun = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

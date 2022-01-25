@@ -1,66 +1,90 @@
-from django.urls import reverse
-import pytest
+import random
+from http import HTTPStatus
 
-from werewolf.models.game import Player
+from django.urls import reverse
+from rest_framework.test import APIClient
+
+from authentication.tests.factories import UserFactory
+from werewolf.tests.factories import StartedGame
 from werewolf.models.actions import Vote
 
 
-@pytest.fixture
-def started_game(client, game_with_players):
-    game = game_with_players
-    url = reverse('start-game', args=(game.pk, ))
-    client.login(username='test_user', password='test_password')
-    client.post(url)
-    game.refresh_from_db()
-    yield game
+class TestVote:
 
+    def test_vote(self, db):
+        random.seed(42)
 
-@pytest.fixture
-def dwight(game_with_players):
-    yield Player.objects.get(owner__username='dwight')
+        game = StartedGame()
+        player = game.player_set.first()  # Mike
+        whom = game.player_set.last()
 
+        url = reverse('game-vote', args=(game.pk,))
 
-@pytest.fixture
-def mike(game_with_players):
-    yield Player.objects.get(owner__username='mike')
+        data = {
+            "whom": whom.pk
+        }
 
+        client = APIClient()
+        client.force_authenticate(user=player.owner)
+        response = client.post(url, data=data, format='json')
+        assert response.status_code == HTTPStatus.OK
+        assert response.json() == {
+            "round": 1,
+            "who": player.pk,
+            "whom": whom.pk,
+        }
+        Vote.objects.get(who=player, whom=whom)
 
-@pytest.fixture
-def pam(game_with_players):
-    yield Player.objects.get(owner__username='pam')
+    def test_vote_me(self, db):
+        random.seed(42)
 
+        game = StartedGame()
+        me = game.player_set.first()  # Mike
 
-@pytest.mark.django_db
-def test_vote(client, started_game, mike, dwight):
-    client.login(username='mike', password='mike_password')
-    game = started_game
+        url = reverse('game-vote', args=(game.pk,))
+        data = {
+            "whom": me.pk
+        }
 
-    url = reverse('action-vote', args=(game.pk, ))
-    response = client.post(url, {'whom': dwight.pk})
-    assert response.status_code == 200
+        client = APIClient()
+        client.force_authenticate(user=me.owner)
+        response = client.post(url, data=data, format='json')
+        assert response.status_code == HTTPStatus.BAD_REQUEST
+        assert not Vote.objects.all().exists()
 
-    vote = Vote.objects.get(round=game.current_round, who=mike)
-    assert vote.whom == dwight
+    def test_only_one_vote(self, db):
+        random.seed(42)
 
+        game = StartedGame()
+        me = game.player_set.first()
+        seconde_vote = game.player_set.all()[1]
+        first_vote = game.player_set.all()[2]
 
-@pytest.mark.django_db
-def test_vote_me(client, started_game, mike):
-    client.login(username='mike', password='mike_password')
-    game = started_game
+        client = APIClient()
+        client.force_authenticate(user=me.owner)
 
-    url = reverse('action-vote', args=(game.pk, ))
-    response = client.post(url, {'whom': mike.pk})
-    assert response.status_code == 400
+        url = reverse('game-vote', args=(game.pk,))
+        client.post(url, data={"whom": first_vote.pk}, format='json')
+        client.post(url, data={"whom": seconde_vote.pk}, format='json')
 
+        vote = Vote.objects.first()
+        assert Vote.objects.count() == 1
+        assert vote.whom == seconde_vote
+        assert vote.who == me
 
-@pytest.mark.django_db
-def test_only_one_vote(client, started_game, mike, dwight, pam):
-    client.login(username='mike', password='mike_password')
-    game = started_game
+    def test_not_on_the_game(self, db):
+        random.seed(42)
 
-    url = reverse('action-vote', args=(game.pk, ))
-    client.post(url, {'whom': dwight.pk})
-    client.post(url, {'whom': pam.pk})
+        game = StartedGame()
+        me = UserFactory()
 
-    vote = Vote.objects.get(round=game.current_round, who=mike)
-    assert vote.whom == pam
+        vote = game.player_set.all()[2]
+
+        client = APIClient()
+        client.force_authenticate(user=me)
+
+        url = reverse('game-vote', args=(game.pk,))
+        response = client.post(url, data={"whom": vote.pk}, format='json')
+        assert response.status_code == HTTPStatus.FORBIDDEN
+
+        assert not Vote.objects.all().exists()
