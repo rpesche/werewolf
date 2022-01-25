@@ -10,6 +10,7 @@ class SelectAction(models.Model):
 
     class Meta:
         abstract = True
+        unique_together = ("round", "who")
 
 
 class Elect(SelectAction):
@@ -24,6 +25,9 @@ class Vote(SelectAction):
         Actions to vote against someone, and kill it at the end of the day
     """
     permission = 'can_vote'
+
+    def __str__(self):
+        return f"Vote from \"{self.who.owner.username}\" against \"{self.whom.owner.username}\""
 
 
 class Murder(SelectAction):
