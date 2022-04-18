@@ -77,6 +77,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     "default": dj_database_url.config(conn_max_age=600, default='sqlite://db.sqlite')
 }
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Password validation
