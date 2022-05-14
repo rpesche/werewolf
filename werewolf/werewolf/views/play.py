@@ -1,8 +1,6 @@
 from rest_framework.generics import UpdateAPIView
-from rest_framework.decorators import action
-from rest_framework.mixins import UpdateModelMixin
 
-from werewolf.models.game import Game, Player
+from werewolf.models.game import Player
 from werewolf.models.actions import Vote
 from werewolf.serializers import VoteSerializer
 from werewolf.views.generics import GameViewGeneric
